@@ -1,23 +1,12 @@
-<link rel="stylesheet" href="css/index.css">
-
-<script>
-
-document.addEventListener("contextmenu",function (dilosurucu) {
-
-dilosurucu.preventDefault();
-
-});
-
-  </script>
-
 <table
   id="player"
   style="
-    background-color: #101214;
+    background-color: #111;
     color: #fff;
     font-family: Helvetica, Arial;
     font-size: 5vmin;
     border-radius: 10px;
+    filter: opacity(0.8);
     width: 100%;
     height: 100%;
   "
@@ -117,9 +106,15 @@ dilosurucu.preventDefault();
           ></div>
         </div>
         <div style="float: right; font-size: 0.9em">
-
-        @Lyph3r
-
+          👾
+          <a
+            href="https://github.com/Lyph3r/Spotify-Widget"
+            target="_blank"
+            style="color: white"
+            >Spotify-Widget</a
+          >
+          by
+          <a href="https://lyph3r.com" target="_blank" style="color: white">Lyph3r</a> 💀
         </div>
       </div>
     </td>
@@ -135,6 +130,7 @@ dilosurucu.preventDefault();
       z-index: -10;
       background-position: center center;
       background-size: 100%;
+      filter: blur(2em);
       position: absolute;
       transition: background-image 0.5s ease-in;
     "
@@ -154,13 +150,8 @@ dilosurucu.preventDefault();
         if (data.hasOwnProperty("ERROR")) {
           document.getElementById(
             "player-song"
-          ).innerHTML = `${spotifyUser} is not listening to music right now.`;
+          ).innerHTML = `${spotifyUser} isn't playing anything.`;
           document.getElementById("player-artist").innerHTML = "  ";
-
-          document.getElementById("player-song-link").style.display = "none";
-          document.getElementById("player-artist-link").style.display = "none";
-          document.getElementById("player-album-link").style.display = "none";
-          document.getElementById("player-mp3-link").style.display = "none";
           return;
         }
         songData = data;
@@ -168,8 +159,8 @@ dilosurucu.preventDefault();
         document.getElementById("player-artist").innerHTML =
           data.item.artists[0].name;
         document.getElementById("player-status").innerHTML = data.is_playing
-          ? `▶️ ${spotifyUser} listening...`
-          : `⏸ ${spotifyUser} stopped.`;
+          ? `▶️ ${spotifyUser}'s now playing...`
+          : `⏸ ${spotifyUser} has paused.`;
         document
           .getElementById("player-album-art")
           .setAttribute("src", data.item.album.images[1].url);
@@ -180,6 +171,11 @@ dilosurucu.preventDefault();
             document.getElementById("player-progress").getAttribute("style") +
               `width: ${(data.progress_ms * 100) / data.item.duration_ms}%`
           );
+
+        document.getElementById(
+          "player-background"
+        ).style.backgroundImage = `url(${data.item.album.images[1].url})`;
+
         // Set the links to spotify stuff
         document
           .getElementById("player-song-link")
@@ -211,12 +207,17 @@ dilosurucu.preventDefault();
         } else {
           setProgress();
         }
-    
-    
 
         // Hide all the extra things in mobile (<410px)
         if (document.getElementById("player").clientWidth < 410) {
+          // Hide links
+          document.getElementById("player-song-link").style.display = "none";
+          document.getElementById("player-artist-link").style.display = "none";
+          document.getElementById("player-album-link").style.display = "none";
+          document.getElementById("player-mp3-link").style.display = "none";
 
+          // Hide duration
+          document.getElementById("player-time").style.display = "none";
         }
       });
   }
@@ -248,6 +249,6 @@ dilosurucu.preventDefault();
     }
   }
 
-  // Oynatıcıyı Yükle
+  // Load player for the first time
   updatePlayer();
 </script>
